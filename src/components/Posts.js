@@ -1,22 +1,14 @@
 import React, { Component } from 'react'
+import { connect } from 'react-redux' //connects components to redux store given by Provider
+import { fetchPosts } from '../actions/postActions'
 
 class Posts extends Component {
-    constructor(props) {
-        super(props)
-        this.state = {
-            posts: []
-        }
 
-    }
     componentWillMount() {
-        fetch('http://jsonplaceholder.typicode.com/posts')
-            .then(res => res.json())
-            .then(data => this.setState({
-                posts: data
-            }))
+        this.props.fetchPosts()
     }
   render() {
-      const postItems = this.state.posts.map(post => (
+      const postItems =this.props.posts.map(post => (
           <div key={post.id}>
           <h3>{post.title}</h3>
           <p>{post.body}</p>
@@ -32,4 +24,8 @@ class Posts extends Component {
   }
 }
 
-export default Posts
+const mapStateToProps = state => ({
+    posts: state.posts.items //state.posts corresponds to what was set in root reducer
+})
+
+export default connect(mapStateToProps, { fetchPosts } )(Posts) //where we want to map state to properties
