@@ -1,16 +1,36 @@
-
-import { FETCH_POSTS, NEW_POST } from './types'
+import { FETCH_POSTS, NEW_POST } from "./types";
 
 //each action creater is function to export
 
-export const fetchPosts = () => dispatch => { //es6 also, dispatch is like a promise resolve
-    console.log('fetch!')
+export const fetchPosts = () => dispatch => {
+  //es6 also, dispatch is like a promise resolve
+  console.log("fetch!");
 
-        fetch('http://jsonplaceholder.typicode.com/posts')
-            .then(res => res.json())
-            .then(posts => dispatch({ //no longer setting state, want to dispatch
-                type: FETCH_POSTS,
-                payload: posts
-            }) )
-
-    }
+  fetch("http://jsonplaceholder.typicode.com/posts")
+    .then(res => res.json())
+    .then(posts =>
+      dispatch({
+        //no longer setting state, want to dispatch
+        type: FETCH_POSTS,
+        payload: posts
+      })
+    );
+};
+export const createPost = postData => dispatch => {
+  
+  fetch("http://jsonplaceholder.typicode.com/posts", {
+    method: "POST",
+    headers: {
+      "content-type": "application/json"
+    },
+    body: JSON.stringify(postData)
+  })
+    .then(res => res.json())
+    .then(post => 
+        dispatch({
+            type: NEW_POST, 
+            payload: post
+        })
+        
+        )
+};
